@@ -26,13 +26,14 @@ env = environ.Env(
     CELERY_RESULT_BACKEND=(str, "django-db"),
     CELERY_CACHE_BACKEND=(str, "django-cache"),
     CELERY_SCHEDULE=(bool, False),
+    DJANGO_SECRET_KEY=str,
 )
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-xar7ot0n3ux0cki62o3^aw%1$&9x*n7vf9fqi=&^$#ec0u(3pu"
+SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -62,7 +63,6 @@ INSTALLED_APPS = [
     "django_celery_beat",
     "django_celery_results",
     "flower",
-
 ]
 
 MIDDLEWARE = [
