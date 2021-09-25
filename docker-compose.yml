@@ -54,7 +54,7 @@ services:
   celery:
     build: .
     container_name: celery
-    command: celery -A project worker -l INFO
+    command: celery -A project worker -l INFO -n celery@%h
     volumes:
       - ./project:/code/project
       - ./logs:/code/logs

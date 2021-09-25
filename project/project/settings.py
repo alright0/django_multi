@@ -26,14 +26,15 @@ env = environ.Env(
     CELERY_RESULT_BACKEND=(str, "django-db"),
     CELERY_CACHE_BACKEND=(str, "django-cache"),
     CELERY_SCHEDULE=(bool, False),
-    DJANGO_SECRET_KEY=str,
+    SECRET_KEY=str,
 )
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("DJANGO_SECRET_KEY")
+SECRET_KEY = "str"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -62,7 +63,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_celery_beat",
     "django_celery_results",
+    "graphene_django",
     "flower",
+    "new",
 ]
 
 MIDDLEWARE = [
@@ -151,3 +154,11 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+GRAPHIQL_GRAPHQL_URL = "/graphql/"
+
+GRAPHENE = {
+    "SCHEMA": "graph_ql.schema",
+    "RELAY_CONNECTION_MAX_LIMIT": 1000,
+    "SCHEMA_OUTPUT": "schema.json",
+}
