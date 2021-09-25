@@ -7,9 +7,9 @@ services:
   web:
     build: .
     container_name: Django
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python src/manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./project:/code/project
+      - ./src:/code/src
       - ./logs:/code/logs
     ports:
       - 8000:8000
@@ -54,9 +54,9 @@ services:
   celery:
     build: .
     container_name: celery
-    command: celery -A project worker -l INFO -n celery@%h
+    command: bash -c "cd src && celery -A project worker -l INFO -n celery@%h"
     volumes:
-      - ./project:/code/project
+      - ./src:/code/src
       - ./logs:/code/logs
     depends_on:
       - web
@@ -65,9 +65,9 @@ services:
   celery-beat:
     build: .
     container_name: celery-beat
-    command: celery -A project beat
+    command: bash -c "cd src && celery -A project beat"
     volumes:
-      - ./project:/code/project
+      - ./src:/code/src
       - ./logs:/code/logs
     depends_on:
       - web
@@ -76,11 +76,11 @@ services:
   flower:
     build: .
     container_name: flower
-    command: celery -A project --broker=redis://redis:6379/0 flower --port=5555
+    command: bash -c "cd src && celery -A project --broker=redis://redis:6379/0 flower --port=5555"
     ports:
       - 5555:5555
     volumes:
-      - ./project:/code/project
+      - ./src:/code/src
       - ./logs:/code/logs
     depends_on:
       - web
