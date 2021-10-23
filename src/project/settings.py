@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import os
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -158,7 +157,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 GRAPHIQL_GRAPHQL_URL = "/graphql/"
 
 GRAPHENE = {
-    "SCHEMA": "graph_ql.schema",
+    "SCHEMA": "project.schema",
     "RELAY_CONNECTION_MAX_LIMIT": 1000,
     "SCHEMA_OUTPUT": "schema.json",
 }
