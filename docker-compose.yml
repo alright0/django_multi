@@ -7,12 +7,12 @@ services:
   web:
     build: .
     container_name: Django
-    command: python src/manage.py runserver 0.0.0.0:8000
+    command: python src/manage.py runserver 0.0.0.0:20000
     volumes:
       - ./src:/code/src
       - ./logs:/code/logs
     ports:
-      - 8000:8000
+      - 20000:20000
     env_file:
       - ./.env
     depends_on:
@@ -21,18 +21,16 @@ services:
 
   db:
     container_name: Postgres
-    image: postgres
+    image: postgres:12-alpine
     volumes:
       - pg_volume:/var/lib/postgresql/data/
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: main
-    ports:
-      - 5432:5432
 
   pgadmin:
-    container_name: pg_admin
+    container_name: Pg_admin
     image: dpage/pgadmin4
     restart: unless-stopped
     volumes:
@@ -43,17 +41,15 @@ services:
       PGADMIN_DEFAULT_EMAIL: koro6@yandex.ru
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - 5050:80
+      - 5444:80
 
   redis :
-    container_name: redis
-    image: redis
-    ports:
-      - 6379:6379
+    container_name: Redis
+    image: redis:4.0.14-alpine
 
   celery:
     build: .
-    container_name: celery
+    container_name: Celery
     command: bash -c "cd src && celery -A project worker -l INFO -n celery@%h"
     volumes:
       - ./src:/code/src
@@ -64,7 +60,7 @@ services:
 
   celery-beat:
     build: .
-    container_name: celery-beat
+    container_name: Celery-beat
     command: bash -c "cd src && celery -A project beat"
     volumes:
       - ./src:/code/src
@@ -75,10 +71,10 @@ services:
 
   flower:
     build: .
-    container_name: flower
+    container_name: Celery-flower
     command: bash -c "cd src && celery -A project --broker=redis://redis:6379/0 flower --port=5555"
     ports:
-      - 5555:5555
+      - 20001:5555
     volumes:
       - ./src:/code/src
       - ./logs:/code/logs

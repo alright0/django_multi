@@ -1,6 +1,6 @@
 import graphene
 from graphene_django.filter import DjangoFilterConnectionField
-from new.schema import BookNode, CreateBook, UpdateBook
+from books.schema import BookNode, CreateBook, UpdateBook
 
 
 class Query(graphene.ObjectType):
