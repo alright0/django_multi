@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "flower",
     "books",
+    "protocol",
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,5 @@ GRAPHENE = {
     "RELAY_CONNECTION_MAX_LIMIT": 1000,
     "SCHEMA_OUTPUT": "schema.json",
 }
+
+MEDIA_ROOT = "../media"

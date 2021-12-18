@@ -1,6 +1,7 @@
 import graphene
 from graphene.relay.node import Node
 from graphene_django import DjangoObjectType
+from graphql_relay import from_global_id
 
 from books.models import Book
 
@@ -17,7 +18,7 @@ class BookNode(DjangoObjectType):
             "id": ["exact"],
             "title": ["exact", "icontains"],
             "author": ["exact", "icontains", "in"],
-            "category": ['exact', "icontains"],
+            "category": ["exact", "icontains"],
         }
 
     def resolve_title(self, info, **kwargs):
@@ -64,3 +65,18 @@ class CreateBook(graphene.Mutation):
         book.save()
 
         return CreateBook(book=book)
+
+
+class DeleteBook(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+
+    book = graphene.Field(BookNode)
+
+    @classmethod
+    def mutate(cls, root, info, id):
+        _, id = from_global_id(id)
+        book = Book.objects.get(pk=id)
+        book.delete()
+
+        return DeleteBook(book=book)

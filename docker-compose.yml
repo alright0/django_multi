@@ -3,6 +3,7 @@ version: '3'
 volumes:
   pg_volume:
 
+    null
 services:
   web:
     build: .
@@ -28,22 +29,10 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: main
-
-  pgadmin:
-    container_name: Pg_admin
-    image: dpage/pgadmin4
-    restart: unless-stopped
-    volumes:
-      - ./sql/dumps:/var/lib/pgadmin/storage/
-    depends_on:
-      - db
-    environment:
-      PGADMIN_DEFAULT_EMAIL: koro6@yandex.ru
-      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - 5444:80
+      - 5433:5432
 
-  redis :
+  redis:
     container_name: Redis
     image: redis:4.0.14-alpine
 
@@ -72,7 +61,8 @@ services:
   flower:
     build: .
     container_name: Celery-flower
-    command: bash -c "cd src && celery -A project --broker=redis://redis:6379/0 flower --port=5555"
+    command: bash -c "cd src && celery -A project --broker=redis://redis:6379/0
+      flower --port=5555"
     ports:
       - 20001:5555
     volumes:
