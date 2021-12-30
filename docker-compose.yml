@@ -12,6 +12,7 @@ services:
     volumes:
       - ./src:/code/src
       - ./logs:/code/logs
+      - ./media:/code/media
     ports:
       - 20000:20000
     env_file:

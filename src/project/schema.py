@@ -10,6 +10,7 @@ from protocol.schema import (
     CreateScreen,
     DeleteScreen,
     UpdateScreen,
+    UploadImage,
 )
 
 
@@ -39,6 +40,7 @@ class Mutation(graphene.ObjectType):
     update_screen = UpdateScreen.Field()
     delete_screen = DeleteScreen.Field()
 
+    upload_image = UploadImage.Field()
 
 schema = graphene.Schema(
     query=Query,

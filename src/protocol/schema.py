@@ -2,7 +2,8 @@ import graphene
 from graphene.relay.node import Node
 from graphene_django import DjangoObjectType
 from graphql_relay import from_global_id
-import graphql_relay
+from graphene_file_upload.scalars import Upload
+from django.core.files import File
 
 from protocol.models import Protocol, Screen
 
@@ -30,6 +31,7 @@ class UpdateProtocol(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, title, id, type):
+        _, id = from_global_id(id)
         protocol = Protocol.objects.get(pk=id)
         protocol.title = title
         protocol.type = type
@@ -41,8 +43,9 @@ class UpdateProtocol(graphene.Mutation):
 class CreateProtocol(graphene.Mutation):
     class Arguments:
         title = graphene.String()
+        type = graphene.String()
 
-    Protocol = graphene.Field(ProtocolNode)
+    protocol = graphene.Field(ProtocolNode)
 
     @classmethod
     def mutate(cls, root, info, title, type):
@@ -85,7 +88,7 @@ class UpdateScreen(graphene.Mutation):
         title = graphene.String()
         type = graphene.String()
         description = graphene.String()
-        key = graphene.String()
+        key = graphene.Float()
 
     screen = graphene.Field(ScreenNode)
 
@@ -140,3 +143,27 @@ class DeleteScreen(graphene.Mutation):
         screen.delete()
 
         return DeleteScreen(screen=screen)
+
+class UploadImage(graphene.Mutation):
+    class Arguments:
+        image = Upload()
+        description = graphene.String()
+        parent = graphene.String()
+        key = graphene.Float()
+
+    screen = graphene.Field(ScreenNode)
+
+    @classmethod
+    def mutate(cls, root, info, image, description, parent, key):
+        _, id = from_global_id(parent)
+        parent = Protocol.objects.get(id=id)
+
+        screen = Screen()
+        screen.image=image
+        screen.description= description
+        screen.type=Screen.IMAGE_SCREEN
+        screen.parent=parent
+        screen.key=key
+        screen.save()
+
+        return UploadImage(screen=screen)
